@@ -1,0 +1,26 @@
+# Contributing
+
+## Building
+
+```bash
+make
+```
+
+## Running
+
+```bash
+./build/win
+```
+
+## Library
+
+```bash
+make lib
+```
+
+## Clean
+
+```bash
+make clean
+```
+
