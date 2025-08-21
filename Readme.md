@@ -8,8 +8,8 @@ Nod is a file manager for the terminal for Linux (Archlinux) and Windows.
 ## Vanguard
 | Feature | Linux | Windows |
 | --- | --- | --- |
-| File Manager | :heavy_check_mark: | :heavy_check_mark: |
-| 
+| File Manager | :heavy_check_mark: | :x: |
+
 
 ## License
 [MIT](LICENSE)
