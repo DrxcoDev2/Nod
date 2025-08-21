@@ -6,7 +6,7 @@ SRC_DIR  = src
 BUILD_DIR = build
 
 # Ejecutables
-BINARIES = $(BUILD_DIR)/win $(BUILD_DIR)/file_details $(BUILD_DIR)/make_path
+BINARIES = $(BUILD_DIR)/win $(BUILD_DIR)/fd $(BUILD_DIR)/mp
 
 .PHONY: all clean run lib
 
@@ -18,10 +18,10 @@ $(BUILD_DIR):
 $(BUILD_DIR)/win: $(SRC_DIR)/UI/win.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/file_details: $(SRC_DIR)/file_details.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/fd: $(SRC_DIR)/file_details.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/make_path: $(SRC_DIR)/make_path.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/mp: $(SRC_DIR)/make_path.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 clean:
@@ -30,4 +30,4 @@ clean:
 run: $(BUILD_DIR)/win
 	./$(BUILD_DIR)/win
 
-lib: $(BUILD_DIR)/file_details $(BUILD_DIR)/make_path
+lib: $(BUILD_DIR)/fd $(BUILD_DIR)/mp

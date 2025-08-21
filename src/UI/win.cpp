@@ -1,21 +1,54 @@
 #include <ncurses.h>
-using namespace std;
+#include <string>
+#include <cstdio>
+#include <cstdlib>
 
-int main(int argc, char ** argv)
-{
-    // init screen and sets up screen
+void run_and_display(const std::string &cmd) {
+    FILE* pipe = popen(cmd.c_str(), "r");
+    if (!pipe) {
+        printw("Error: could not run command\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        printw("%s", buffer);
+    }
+    pclose(pipe);
+}
+
+int main() {
     initscr();
+    cbreak();
+    echo();   // <-- Mostrar lo que el usuario escribe
 
-    // print to screen
-    printw("Hello World");
+    while (true) {
+        printw("\n>>> ");
+        refresh();
 
-    // refreshes the screen
-    refresh();
+        char input[256];
+        getstr(input);
+        std::string command = input;
 
-    // pause the screen output
-    getch();
+        if (command == "exit" || command == "quit") {
+            break;
+        }
+        else if (command == "fd") {
+            clear();
+            printw("[file_details output]\n\n");
+            run_and_display("fd");
+        }
+        else {
+            clear();
+            printw("[ejecutando %s]\n\n", command.c_str());
+            run_and_display(command);
+        }
 
-    // deallocates memory and ends ncurses
+        printw("\n\n(Presiona una tecla para continuar)");
+        getch();
+        clear();
+    }
+
     endwin();
     return 0;
 }
