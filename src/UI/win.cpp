@@ -3,16 +3,17 @@
 #include <cstdio>
 #include <cstdlib>
 
-void run_and_display(const std::string &cmd) {
+void runCommandNcurses(const std::string& cmd) {
     FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) {
-        printw("Error: could not run command\n");
+        printw("Error al ejecutar el comando.\n");
         return;
     }
 
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
         printw("%s", buffer);
+        refresh();
     }
     pclose(pipe);
 }
@@ -20,7 +21,7 @@ void run_and_display(const std::string &cmd) {
 int main() {
     initscr();
     cbreak();
-    echo();   // <-- Mostrar lo que el usuario escribe
+    echo();   
 
     while (true) {
         printw("\n>>> ");
@@ -36,12 +37,13 @@ int main() {
         else if (command == "fd") {
             clear();
             printw("[file_details output]\n\n");
-            run_and_display("fd");
+            printw("Se ejecutara el comando: fd\n");
+            runCommandNcurses("fds");
         }
         else {
             clear();
             printw("[ejecutando %s]\n\n", command.c_str());
-            run_and_display(command);
+            runCommandNcurses(command);
         }
 
         printw("\n\n(Presiona una tecla para continuar)");
