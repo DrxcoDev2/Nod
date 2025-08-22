@@ -1,3 +1,5 @@
 build/
 build/*
 
+libs/*.o
+libs/*.s
