@@ -1,9 +1,13 @@
+#include "../include/color.hpp"
+
 #include <iostream>
 #include <filesystem>
 #include <fstream>
 #include <chrono>
 #include <string>
 
+
+using namespace ConsoleColor;
 using namespace std;
 using namespace std::filesystem;
 
@@ -64,30 +68,43 @@ int main(int argc, char *argv[]) {
             cout << "Last write time: " << ctime(&cftime);
         }
         else if (arg == "-lang") {
-            string ext = filepath.extension().string(); 
+            std::string ext = filepath.extension().string(); 
         
-            string language;
+            std::string language;
+            Color color; // ahora usamos la enumeraci�n
+        
             if (ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".h" || ext == ".hpp") {
                 language = "C++";
+                color = BLUE;
             } else if (ext == ".c") {
                 language = "C";
+                color = DARK_GRAY;
             } else if (ext == ".py") {
                 language = "Python";
+                color = CYAN;
             } else if (ext == ".java") {
                 language = "Java";
+                color = YELLOW;
             } else if (ext == ".js") {
                 language = "JavaScript";
+                color = LIGHT_YELLOW;
             } else if (ext == ".html" || ext == ".htm") {
                 language = "HTML";
+                color = LIGHT_RED;
             } else if (ext == ".css") {
                 language = "CSS";
+                color = LIGHT_BLUE;
             } else if (ext == ".sh") {
                 language = "Shell script";
+                color = LIGHT_GREEN;
             } else {
                 language = "Unknown (" + ext + ")";
+                color = LIGHT_RED;
             }
         
-            cout << "Language: " << language << endl;
+            setColor(color);        // cambiar color de consola
+            std::cout << language << std::endl;
+            resetColor();           // volver al color por defecto
         }
     }
 

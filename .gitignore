@@ -3,3 +3,5 @@ build/*
 
 libs/*.o
 libs/*.s
+
+src/compiler/dist
