@@ -5,3 +5,7 @@ libs/*.o
 libs/*.s
 
 src/compiler/dist
+src/compiler/func
+src/compiler/out
+src/compiler/*.o
+src/compiler/out.asm

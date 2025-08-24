@@ -6,4 +6,15 @@ print 5 - 2;
 int x = 12;
 print x;
 
+::void::saluda() {
+    print "Hola mundo";
+    return 0;
+}
+
+::void::main() {
+    saluda();
+    return 0;
+}
+
+
 return 0;

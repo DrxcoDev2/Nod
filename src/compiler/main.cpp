@@ -17,7 +17,14 @@ enum class TokenType {
     comment,
     _int,        // palabra clave int
     _identifier, // nombre de variable
-    assign    
+    assign,
+    _void,         // palabra clave void
+    lbrace,        // {
+    rbrace,        // }
+    lparen,        // (
+    rparen,        // )   
+    func_void_decl,   // ::void::nombre() { ... }
+
 };
 
 struct Token {
@@ -47,7 +54,8 @@ std::vector<Token> tokenize(const std::string &str) {
                 tokens.push_back({TokenType::_print, std::nullopt});
             } else if (buf == "int") {
                 tokens.push_back({TokenType::_int, std::nullopt});
-            } else {
+            } 
+            else {
                 tokens.push_back({TokenType::_identifier, buf});
             }
         }
@@ -107,6 +115,24 @@ std::vector<Token> tokenize(const std::string &str) {
         else if (c == '=') {
             tokens.push_back({TokenType::assign, std::nullopt});
         }
+        else if (c == '{') {
+            tokens.push_back({TokenType::lbrace, std::nullopt});
+        }
+        else if (c == '}') {
+            tokens.push_back({TokenType::rbrace, std::nullopt});
+        }
+        else if (c == '(') {
+            tokens.push_back({TokenType::lparen, std::nullopt});
+        }
+        else if (c == ')') {
+            tokens.push_back({TokenType::rparen, std::nullopt});
+        }
+    
+        else if (c == ':' && i + 8 <= str.length() && str.compare(i, 8, "::void::") == 0) {
+            tokens.push_back({TokenType::func_void_decl, std::nullopt});
+            i += 7;          
+            continue;        
+        }
         else {
             std::cerr << "You messed up: unexpected char '" << c << "'\n";
             exit(EXIT_FAILURE);
@@ -152,6 +178,36 @@ std::string tokens_to_asm(const std::vector<Token> &tokens) {
                 text << "    syscall\n";
             }
         }
+
+        //::void::func();
+        else if (tok.type == TokenType::func_void_decl) {
+            if (i + 4 < tokens.size() &&
+                tokens.at(i + 1).type == TokenType::_identifier &&
+                tokens.at(i + 2).type == TokenType::lparen &&
+                tokens.at(i + 3).type == TokenType::rparen &&
+                tokens.at(i + 4).type == TokenType::lbrace) {
+        
+                std::string funcname = tokens.at(i + 1).value.value();
+                text << funcname << ":\n";   // definimos etiqueta de funci�n
+                i += 4; // avanzamos hasta "{"
+            }
+        }
+        else if (tok.type == TokenType::rbrace) {
+            text << "    ret\n";   // cerrar funci�n
+        }
+        
+        // llamada a funcion con ()
+        else if (tok.type == TokenType::_identifier) {
+            if (i + 2 < tokens.size() &&
+                tokens.at(i + 1).type == TokenType::lparen &&
+                tokens.at(i + 2).type == TokenType::rparen) {
+                
+                std::string funcname = tok.value.value();
+                text << "    call " << funcname << "\n";  // llamada
+                i += 2;
+            }
+        }
+        
 
         // print ... ;
         else if (tok.type == TokenType::_print) {
